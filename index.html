@@ -17,7 +17,6 @@
             display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px;
         }
 
-        /* Style pour ton nouveau logo */
         .header-logo { width: 80px; height: 80px; border-radius: 16px; margin-top: 20px; box-shadow: 0 0 20px rgba(47, 129, 247, 0.3); }
 
         h1 { color: var(--primary); margin-top: 15px; margin-bottom: 30px; font-size: 2.2rem; letter-spacing: -1px; }
@@ -65,12 +64,12 @@
         .copied { background: var(--primary) !important; color: white !important; }
         .btn-toggle { background: #2f363d; color: #c9d1d9; border: 1px solid var(--border); }
 
-        footer { margin-top: 50px; color: #484f58; font-size: 0.8rem; text-align: center; padding-bottom: 30px; line-height: 1.5; }
+        footer { margin-top: 30px; color: #484f58; font-size: 0.8rem; text-align: center; padding-bottom: 30px; line-height: 1.5; }
+        .stats-badge { margin-top: 50px; margin-bottom: -40px; }
     </style>
 </head>
 <body>
 
-    <!-- Logo KeryoLabs -->
     <img src="logo.png" alt="Logo" class="header-logo">
 
     <h1>🔐 KeryoPass</h1>
@@ -104,6 +103,11 @@
             <div id="securityPercent">0%</div>
             <div class="time-hack" id="hackTime">Temps de hack : -</div>
         </div>
+    </div>
+
+    <!-- Badge de statistiques -->
+    <div class="stats-badge">
+        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2FKeryoLabs.github.io%2Fkeryopass&count_bg=%232F81F7&title_bg=%23161B22&icon=fingerprint.svg&icon_color=%23E7E7E7&title=Visites&edge_flat=false" alt="Stats de visites"/>
     </div>
 
     <footer>
