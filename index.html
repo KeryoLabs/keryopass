@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CipherPad | Sécurité Pro</title>
+    <title>KeryoPass | Sécurité Pro</title>
     <style>
         :root {
             --primary: #2f81f7; --success: #3fb950; --warn: #d29922; --danger: #f85149;
@@ -16,7 +16,10 @@
             display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px;
         }
 
-        h1 { color: var(--primary); margin-top: 20px; margin-bottom: 30px; font-size: 2.2rem; letter-spacing: -1px; }
+        /* Style pour ton nouveau logo */
+        .header-logo { width: 80px; height: 80px; border-radius: 16px; margin-top: 20px; box-shadow: 0 0 20px rgba(47, 129, 247, 0.3); }
+
+        h1 { color: var(--primary); margin-top: 15px; margin-bottom: 30px; font-size: 2.2rem; letter-spacing: -1px; }
 
         .container { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 1000px; }
 
@@ -66,6 +69,9 @@
 </head>
 <body>
 
+    <!-- Logo KeryoLabs -->
+    <img src="logo.png" alt="Logo" class="header-logo">
+
     <h1>🔐 KeryoPass</h1>
 
     <div class="container">
@@ -100,7 +106,7 @@
     </div>
 
     <footer>
-        <strong>CipherPad © 2026</strong><br>
+        <strong>KeryoLabs © 2026</strong><br>
         Généré localement via Web Crypto API (AES-Ready)<br>
         Aucune donnée ne quitte votre navigateur.
     </footer>
