@@ -28,6 +28,9 @@
             border-radius: 16px; padding: 24px; width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
         }
 
+        /* Style pour le panneau Anti-Hack large du bas */
+        .panel-full { width: 100%; max-width: 800px; margin-top: 25px; }
+
         h2 { color: var(--primary); text-align: center; font-size: 0.9rem; text-transform: uppercase; margin-top: 0; letter-spacing: 1px; margin-bottom: 20px; }
 
         .display-box {
@@ -40,7 +43,7 @@
         .setting { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 0.9rem; }
         input[type="range"] { flex: 1; margin: 0 15px; cursor: pointer; }
 
-        input[type="password"], input[type="text"].analyse-field {
+        input[type="password"], input[type="text"].analyse-field, input[type="text"].guard-field {
             width: 100%; box-sizing: border-box; padding: 14px; background: #0d1117;
             border: 2px solid var(--border); color: white; border-radius: 10px; text-align: center;
             margin-bottom: 12px; font-size: 1.1rem; outline: none; transition: 0.2s;
@@ -63,6 +66,9 @@
         .btn-copy:hover { background: #30363d; }
         .copied { background: var(--primary) !important; color: white !important; }
         .btn-toggle { background: #2f363d; color: #c9d1d9; border: 1px solid var(--border); }
+        .btn-guard { background: var(--primary); color: white; }
+
+        #loadingText { color: var(--warn); font-size: 0.8rem; height: 20px; margin-bottom: 10px; font-style: italic; }
 
         footer { margin-top: 30px; color: #484f58; font-size: 0.8rem; text-align: center; padding-bottom: 30px; line-height: 1.5; }
         .stats-badge { margin-top: 50px; margin-bottom: -40px; }
@@ -75,6 +81,7 @@
     <h1>🔐 KeryoPass</h1>
 
     <div class="container">
+        <!-- PANNEAU GÉNÉRATEUR -->
         <div class="panel">
             <h2>🛡️ Générateur Pro</h2>
             <div id="genOutput" class="display-box">••••••••</div>
@@ -89,13 +96,14 @@
             <div class="setting"><span>Symboles</span><input type="checkbox" id="checkSym" checked></div>
 
             <button class="btn-gen" onclick="genererCode()">GÉNÉRER LE CODE</button>
-            <button id="copyBtn" class="btn-copy" onclick="copierCode()">📋 COPIER LE CODE</button>
+            <button id="copyBtn" class="btn-copy" onclick="copierCode('genOutput', 'copyBtn')">📋 COPIER LE CODE</button>
 
             <div class="history" id="historyLog">
                 <span style="font-size: 0.7rem; font-weight: bold; color: var(--primary);">RÉCENTS :</span>
             </div>
         </div>
 
+        <!-- PANNEAU ANALYSE -->
         <div class="panel">
             <h2>🔍 Analyse de Risque</h2>
             <input type="password" id="analyseInput" class="analyse-field" placeholder="Entrez un mot de passe" oninput="analyserForce()">
@@ -103,9 +111,33 @@
             <div id="securityPercent">0%</div>
             <div class="time-hack" id="hackTime">Temps de hack : -</div>
         </div>
+
+        <!-- NOUVEAU PANNEAU : KERYO GUARD (ANTI-HACK FAKE) -->
+        <div class="panel panel-full">
+            <h2>🛡️ Keryo Guard (Anti-Hack Injection)</h2>
+            <div style="display: flex; gap: 20px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap;">
+                
+                <!-- Partie Gauche (Input et Bouton) -->
+                <div style="flex: 1; min-width: 250px;">
+                    <input type="text" id="guardInput" class="guard-field" placeholder="Code à protéger...">
+                    <button class="btn-guard" onclick="runAntiHack()">INSÉRATION</button>
+                </div>
+
+                <!-- Partie Centre (Status) -->
+                <div id="loadingText" style="flex: 1; text-align: center; align-self: center; display: none;">
+                    insération de lanti hack en cour ...
+                </div>
+
+                <!-- Partie Droite (Résultat et Copie) -->
+                <div style="flex: 1; min-width: 250px;">
+                    <div id="guardOutput" class="display-box" style="color: var(--success);">----</div>
+                    <button id="guardCopyBtn" class="btn-copy" style="display: none;" onclick="copierCode('guardOutput', 'guardCopyBtn')">📋 COPIER</button>
+                </div>
+
+            </div>
+        </div>
     </div>
 
-    <!-- Badge de statistiques -->
     <div class="stats-badge">
         <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2FKeryoLabs.github.io%2Fkeryopass&count_bg=%232F81F7&title_bg=%23161B22&icon=fingerprint.svg&icon_color=%23E7E7E7&title=Visites&edge_flat=false" alt="Stats de visites"/>
     </div>
@@ -132,16 +164,12 @@
             for (let i = 0; i < length; i++) {
                 res += charset.charAt(randomArray[i] % charset.length);
             }
-            
             document.getElementById('genOutput').innerText = res;
-            
             historique.unshift(res);
             if(historique.length > 3) historique.pop();
             updateHistory();
-
-            const btn = document.getElementById('copyBtn');
-            btn.innerText = "📋 COPIER LE CODE";
-            btn.classList.remove('copied');
+            document.getElementById('copyBtn').innerText = "📋 COPIER LE CODE";
+            document.getElementById('copyBtn').classList.remove('copied');
         }
 
         function updateHistory() {
@@ -155,16 +183,17 @@
             });
         }
 
-        async function copierCode() {
-            const text = document.getElementById('genOutput').innerText;
-            if (text.includes("•")) return;
+        async function copierCode(targetId, btnId) {
+            const text = document.getElementById(targetId).innerText;
+            if (text.includes("•") || text === "----") return;
             try {
                 await navigator.clipboard.writeText(text);
-                const btn = document.getElementById('copyBtn');
+                const btn = document.getElementById(btnId);
+                const originalText = btn.innerText;
                 btn.innerText = "✔️ COPIÉ !";
                 btn.classList.add('copied');
                 setTimeout(() => {
-                    btn.innerText = "📋 COPIER LE CODE";
+                    btn.innerText = originalText;
                     btn.classList.remove('copied');
                 }, 2000);
             } catch (err) { console.error("Erreur copie"); }
@@ -186,33 +215,63 @@
             const val = document.getElementById('analyseInput').value;
             const scoreEl = document.getElementById('securityPercent');
             const timeEl = document.getElementById('hackTime');
-            
             if (val.length === 0) { 
                 scoreEl.innerText = "0%"; 
                 scoreEl.style.color = "inherit";
                 timeEl.innerText = "Temps de hack : -";
                 return; 
             }
-            
             let score = 0;
             if (val.length >= 8) score += 20;
             if (val.length >= 14) score += 20;
             if (/[A-Z]/.test(val)) score += 20;
             if (/[0-9]/.test(val)) score += 20;
             if (/[!@#$%^&*()]/.test(val)) score += 20;
-
             scoreEl.innerText = score + "%";
-            
             let finalColor = "#f85149";
             let time = "Immédiat";
-
             if(score >= 40) { finalColor = "#d29922"; time = "15 jours"; }
             if(score >= 80) { finalColor = "#3fb950"; time = "400 ans"; }
             if(score >= 100) { finalColor = "#00ff73"; time = "3 millions d'années"; }
-
             scoreEl.style.color = finalColor;
             timeEl.innerText = "Temps de hack : " + time;
             timeEl.style.color = finalColor;
+        }
+
+        // FONCTION ANTI-HACK (Animation Matrix)
+        function runAntiHack() {
+            const inputVal = document.getElementById('guardInput').value;
+            if (!inputVal) return;
+
+            const outputBox = document.getElementById('guardOutput');
+            const statusText = document.getElementById('loadingText');
+            const copyBtn = document.getElementById('guardCopyBtn');
+
+            // Reset
+            statusText.style.display = "block";
+            copyBtn.style.display = "none";
+            outputBox.style.color = "#79c0ff";
+
+            let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+            let iterations = 0;
+            
+            // Animation de défilement
+            const interval = setInterval(() => {
+                let randomStr = "";
+                for(let i=0; i<inputVal.length; i++) {
+                    randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                outputBox.innerText = randomStr;
+                iterations++;
+
+                if (iterations > 20) {
+                    clearInterval(interval);
+                    statusText.style.display = "none";
+                    outputBox.innerText = inputVal; // Retour au code original
+                    outputBox.style.color = "var(--success)"; // Devient vert
+                    copyBtn.style.display = "block";
+                }
+            }, 80);
         }
     </script>
 </body>
