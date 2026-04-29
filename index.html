@@ -3,35 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeryoPass System v4.1</title>
+    <title>KeryoPass System v5.0 - Final Edition</title>
     <style>
-        :root { --primary: #2f81f7; --secondary: #5865f2; --border: #30363d; --urgency: #f85149; --success: #238636; }
+        :root { --primary: #2f81f7; --secondary: #5865f2; --border: #30363d; --urgency: #f85149; --success: #238636; --panel-bg: #000000; }
         body { background: #2b3eb1; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; padding: 20px; }
         .main-layout { display: grid; grid-template-areas: "detail protect" "admin aide"; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1100px; }
-        .panel { background: black; border-radius: 40px; padding: 25px; border: 2px solid var(--border); min-height: 520px; display: flex; flex-direction: column; box-sizing: border-box; }
+        .panel { background: var(--panel-bg); border-radius: 40px; padding: 25px; border: 2px solid var(--border); min-height: 550px; display: flex; flex-direction: column; box-sizing: border-box; position: relative; }
         h2 { color: var(--primary); font-size: 0.9rem; text-align: center; margin-top: 0; text-transform: uppercase; }
         
         .site-desc { font-size: 0.8rem; color: #8b949e; line-height: 1.5; text-align: justify; margin: 15px 0; padding: 10px; border-top: 1px solid #161b22; }
-        .site-desc b { color: #c9d1d9; }
-
-        input { width: 100%; box-sizing: border-box; padding: 10px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 10px; margin-bottom: 8px; text-align: center; outline: none; }
+        input { width: 100%; box-sizing: border-box; padding: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 8px; text-align: center; outline: none; }
         button { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-blue { background: var(--primary); color: white; }
-        .msg-box { display: none; margin-top: 10px; padding: 10px; border-radius: 10px; font-size: 0.8rem; text-align: center; }
-        .msg-success { background: rgba(35, 134, 54, 0.2); border: 1px solid var(--success); color: #7ee787; }
-        .msg-error { background: rgba(248, 81, 73, 0.2); border: 1px solid var(--urgency); color: #ffa198; }
         
-        .admin-nav { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
-        .nav-tab { background: #21262d; padding: 8px 15px; border-radius: 20px; color: white; border: 1px solid var(--border); cursor: pointer; font-size: 0.75rem; width: auto; }
-        .nav-tab.active { background: var(--secondary); border-color: var(--secondary); }
-        .list-item { border-bottom: 1px solid #30363d; padding: 12px 0; font-size: 0.8rem; }
-        .urg-card { background: #1c2128; border-left: 4px solid var(--urgency); border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 0.75rem; position: relative; }
-        .del-urg { position: absolute; top: 8px; right: 8px; cursor: pointer; }
-        .orb-ai { width: 50px; height: 50px; background: radial-gradient(circle, var(--secondary), var(--primary)); border-radius: 50%; margin: auto auto 0 auto; animation: pulse 3s infinite; }
-        @keyframes pulse { 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--primary); } }
-        .btn-option { background: #1c2128; border: 1px solid var(--border); color: white; border-radius: 25px; margin-bottom: 10px; text-align: left; padding-left: 20px; }
-        .btn-logout { background: var(--urgency); color: white; margin-top: auto; font-size: 0.8rem; }
-        .btn-back { background: #333; color: #ccc; margin-top: 10px; font-size: 0.7rem; }
+        /* ADMIN NAV */
+        .admin-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+        .nav-tab { background: #30363d; padding: 10px 25px; border-radius: 30px; color: white; border: none; cursor: pointer; font-size: 0.85rem; }
+        .nav-tab.active { background: var(--secondary); }
+        .nav-tab-star { border-radius: 50%; width: 50px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        
+        /* LIST STYLE */
+        .list-item { border-bottom: 1px solid #161b22; padding: 15px 5px; position: relative; }
+        .list-user { color: var(--primary); font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 10px; }
+        .list-pass { color: #8b949e; font-size: 0.8rem; display: block; }
+        .list-actions { position: absolute; right: 10px; top: 15px; display: flex; gap: 15px; }
+        .action-icon { background: none; color: white; font-size: 1.2rem; width: auto; padding: 0; cursor: pointer; opacity: 0.6; }
+
+        .btn-option { background: #1c2128; border: 1px solid var(--border); color: white; border-radius: 25px; margin-bottom: 10px; text-align: left; padding-left: 20px; font-size: 0.8rem; }
+        .btn-logout { background: #f85149; color: white; border-radius: 20px; margin-top: auto; text-transform: uppercase; letter-spacing: 1px; padding: 15px; }
+
+        .orb-ai { width: 65px; height: 65px; background: radial-gradient(circle, #3a7bd5, #00d2ff); border-radius: 50%; margin: auto auto 0 auto; animation: breathe 3s infinite ease-in-out; }
+        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -39,15 +41,11 @@
     <div class="main-layout">
         <div class="panel">
             <h2>Détail du site 🔊</h2>
-            <p style="font-size:0.7rem; color:var(--primary); text-align:center; margin-bottom:5px;">Système Keryo v4.1</p>
-            
-            <div class="site-desc" id="textToSpeak">
+            <div class="site-desc" id="fullDesc">
                 En enregistrant votre compte sur notre site, vous bénéficiez d'une <b>protection renforcée</b>. Grâce à cette connexion, si vous oubliez votre mot de passe, nous pourrons le récupérer pour vous quasi instantanément. <br><br>
-                Pour les autres services d'assistance, il n'est pas obligatoire d'être enregistré : il vous suffit de suivre les étapes dans la section aide. <br><br>
-                Cependant, un compte protégé par nos soins est bien plus simple à sécuriser. En cas de <b>vol ou de bannissement</b>, notre équipe pourra intervenir pour récupérer votre accès bien plus rapidement que l'assistance officielle. <br><br>
-                <b>Protégez votre compte dès maintenant en l'ajoutant à notre système.</b>
+                Pour les autres services d'assistance, il n'est pas obligatoire d'être enregistré. <br><br>
+                Cependant, un compte protégé par nos soins est bien plus simple à sécuriser. En cas de <b>vol ou de bannissement</b>, notre équipe pourra intervenir pour récupérer votre accès bien plus rapidement.
             </div>
-
             <button class="btn-blue" onclick="speakDesc()">ÉCOUTER LA DESCRIPTION</button>
         </div>
 
@@ -56,160 +54,162 @@
             <input type="text" id="regUser" placeholder="Identifiant">
             <input type="password" id="regPass" placeholder="Mot de passe">
             <button class="btn-blue" onclick="saveData()">INSÉRATION</button>
-            <div id="confirmMsg" class="msg-box msg-success">✅ Données sécurisées !</div>
+            <div id="confirmMsg" style="display:none; color:var(--success); text-align:center; margin-top:10px; font-size:0.8rem;">Compte protégé !</div>
+            <div class="orb-ai"></div>
         </div>
 
         <div class="panel">
             <div id="adminLock">
-                <h2 style="color:white; font-size: 0.75rem;">ADMINISTRATION</h2>
+                <h2>Administration</h2>
                 <input type="password" id="admKey" placeholder="CLEF ACCÈS">
                 <button class="btn-blue" onclick="checkAdmin()">DÉVERROUILLER</button>
             </div>
             <div id="dashboard" style="display:none; flex-direction: column; height: 100%;">
                 <div class="admin-nav">
-                    <button id="tH" class="nav-tab active" onclick="showTab('h')">hist.</button>
-                    <button id="tU" class="nav-tab" onclick="showTab('u')">urgence</button>
-                    <button id="tP" class="nav-tab" onclick="showTab('p')">★</button>
+                    <button id="tab-h" class="nav-tab active" onclick="showTab('h')">hist.</button>
+                    <button id="tab-u" class="nav-tab" onclick="showTab('u')">urgence</button>
+                    <button id="tab-p" class="nav-tab nav-tab-star" onclick="showTab('p')">★</button>
                 </div>
-                <div id="contentH" style="overflow-y: auto; flex-grow: 1;"></div>
-                <div id="contentU" style="display:none; overflow-y: auto; flex-grow: 1;"></div>
-                <div id="contentP" style="display:none; overflow-y: auto; flex-grow: 1;"></div>
-                <button class="btn-logout" onclick="logoutAdmin()">DÉCONNEXION</button>
+                <div id="adminContent" style="overflow-y: auto; flex-grow: 1;"></div>
+                <button class="btn-logout" onclick="location.reload()">DÉCONNEXION</button>
             </div>
         </div>
 
         <div class="panel">
-            <div style="background:var(--secondary); border-radius:20px; padding:10px; text-align:center; font-weight:bold; margin-bottom:20px; font-size: 0.8rem;">⚠️ AIDE MOI ⚠️</div>
-            
+            <div style="background:var(--secondary); border-radius:20px; padding:12px; text-align:center; font-weight:bold; margin-bottom:20px; font-size: 0.8rem;">⚠️ ASSISTANCE ⚠️</div>
             <div id="optionsMenu">
-                <button class="btn-option" onclick="selectOption('MOT DE PASSE OUBLIÉ')">1. Mot de passe oublié</button>
-                <button class="btn-option" onclick="selectOption('COMPTE VOLÉ')">2. Compte volé</button>
-                <button class="btn-option" onclick="selectOption('COMPTE BANNI')">3. Compte banni</button>
+                <button class="btn-option" onclick="openForm(1)">1. Mot de passe oublié</button>
+                <button class="btn-option" onclick="openForm(2)">2. Compte volé</button>
+                <button class="btn-option" onclick="openForm(3)">3. Compte banni</button>
             </div>
-
-            <div id="dynamicForm" style="display:none;">
-                <input type="text" id="hId" placeholder="Identifiant">
-                <input type="password" id="hPs" placeholder="Mot de passe">
-                <input type="text" id="hNm" placeholder="Nom et Prénom">
-                <input type="email" id="hEm" placeholder="Email">
-                <button class="btn-blue" onclick="handleSignal()">SIGNALER</button>
+            <div id="helpForm" style="display:none;">
+                <h3 id="formTitle" style="font-size:0.7rem; color:var(--secondary); text-align:center; margin-bottom:15px; text-transform: uppercase;"></h3>
+                <input type="text" id="helpId" placeholder="Identifiant">
+                <input type="text" id="helpOld" placeholder="Dernier mot de passe connu">
+                <input type="text" id="helpName" placeholder="Nom et Prénom">
+                <input type="email" id="helpMail" placeholder="Email de contact">
+                <button class="btn-blue" onclick="submitHelp()">SIGNALER</button>
+                <button style="background:none; color:grey; font-size:0.7rem; margin-top:10px;" onclick="closeForm()">← RETOUR</button>
             </div>
-
-            <div id="helpMsg" class="msg-box"></div>
-            <button id="btnBack" class="btn-back" style="display:none;" onclick="resetAide()">← RETOUR</button>
+            <div id="helpError" style="display:none; color:var(--urgency); text-align:center; font-size:0.8rem; margin-top:10px;">Identifiant non enregistré dans le registre !</div>
+            <div id="helpSent" style="display:none; color:var(--success); text-align:center; font-size:0.8rem; margin-top:10px;">Signalement envoyé !</div>
             <div class="orb-ai"></div>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('k_db') || '[]');
-        let urg = JSON.parse(localStorage.getItem('k_urg') || '[]');
-        let currentType = "";
+        // Récupération propre des données (Assure que 'reports' est un tableau)
+        let db = JSON.parse(localStorage.getItem('k_db')) || [];
+        let reports = JSON.parse(localStorage.getItem('k_reports')) || [];
+        let currentTab = 'h';
 
-        function speakDesc() {
-            const text = document.getElementById('textToSpeak').innerText;
+        function speak(txt) {
             window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+            let msg = new SpeechSynthesisUtterance(txt);
+            msg.lang = 'fr-FR';
+            window.speechSynthesis.speak(msg);
         }
+
+        function speakDesc() { speak(document.getElementById('fullDesc').innerText); }
 
         function saveData() {
             const u = document.getElementById('regUser').value, p = document.getElementById('regPass').value;
             if(!u || !p) return;
-            db.push({user: u, pass: p, premium: false});
+            db.push({user: u, pass: p, prem: false});
             localStorage.setItem('k_db', JSON.stringify(db));
             document.getElementById('confirmMsg').style.display = 'block';
-            setTimeout(() => document.getElementById('confirmMsg').style.display = 'none', 3000);
+            speak("Compte protégé.");
+            setTimeout(() => { document.getElementById('confirmMsg').style.display = 'none'; }, 2000);
             document.getElementById('regUser').value = ""; document.getElementById('regPass').value = "";
-            if(document.getElementById('dashboard').style.display === 'flex') refreshAdmin();
+            loadAdmin();
         }
 
         function checkAdmin() {
             if(document.getElementById('admKey').value === "123a456b!M_g") {
                 document.getElementById('adminLock').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'flex';
-                refreshAdmin();
+                loadAdmin();
             }
         }
 
-        function logoutAdmin() { document.getElementById('dashboard').style.display = 'none'; document.getElementById('adminLock').style.display = 'block'; }
-
         function showTab(t) {
-            document.getElementById('contentH').style.display = t === 'h' ? 'block' : 'none';
-            document.getElementById('contentU').style.display = t === 'u' ? 'block' : 'none';
-            document.getElementById('contentP').style.display = t === 'p' ? 'block' : 'none';
-            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-            document.getElementById('t' + t.toUpperCase()).classList.add('active');
+            currentTab = t;
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + t).classList.add('active');
+            loadAdmin();
         }
 
-        function refreshAdmin() {
-            const render = (x) => `
-                <div class="list-item">
-                    <div style="display:flex; justify-content:space-between">
-                        <strong style="color:var(--primary)">${x.user}</strong>
-                        <div>
-                            <button onclick="togglePrem(${db.indexOf(x)})" style="width:auto; background:none; color:white;">${x.premium?'★':'☆'}</button>
-                            <button onclick="delUser(${db.indexOf(x)})" style="width:auto; background:none; color:white;">🗑️</button>
-                        </div>
-                    </div>
-                    <div style="color:#8b949e; font-size:0.7rem; margin-top:5px;">PASS: ${x.pass}</div>
-                </div>`;
-            
-            document.getElementById('contentH').innerHTML = db.filter(x => !x.premium).map(render).join('');
-            document.getElementById('contentP').innerHTML = db.filter(x => x.premium).map(render).join('');
-            document.getElementById('contentU').innerHTML = urg.map((x, i) => `
-                <div class="urg-card">
-                    <span class="del-urg" onclick="delUrg(${i})">✖</span>
-                    <strong style="color:var(--urgency)">${x.type}</strong><br>
-                    <strong>ID: ${x.user}</strong><br>
-                    <small>Nom: ${x.nom} | Mail: ${x.mail}${x.pass ? '<br>Pass: '+x.pass : ''}</small>
-                </div>`).join('');
+        function loadAdmin() {
+            const cont = document.getElementById('adminContent');
+            cont.innerHTML = "";
+            if(currentTab === 'h') {
+                db.filter(x => !x.prem).forEach(x => {
+                    cont.innerHTML += `<div class="list-item"><span class="list-user">${x.user}</span><span class="list-pass">PASS: ${x.pass}</span><div class="list-actions"><button class="action-icon" onclick="togglePrem('${x.user}')">☆</button><button class="action-icon" onclick="delLog('${x.user}')">🗑️</button></div></div>`;
+                });
+            } 
+            else if(currentTab === 'p') {
+                db.filter(x => x.prem).forEach(x => {
+                    cont.innerHTML += `<div class="list-item"><span class="list-user" style="color:gold">💎 ${x.user}</span><span class="list-pass">PASS: ${x.pass}</span><div class="list-actions"><button class="action-icon" style="color:var(--secondary)" onclick="togglePrem('${x.user}')">★</button><button class="action-icon" onclick="delLog('${x.user}')">🗑️</button></div></div>`;
+                });
+            }
+            else if(currentTab === 'u') {
+                reports.forEach((x, i) => {
+                    cont.innerHTML += `<div class="list-item" style="border-left: 4px solid var(--urgency); background: #1c1c1c; margin-bottom:10px; border-radius:15px; padding:15px;"><span style="color:var(--urgency); font-weight:bold; font-size:0.7rem;">${x.type}</span><br><b>ID: ${x.id}</b><br><span style="font-size:0.75rem; color: #8b949e;">Ancien: ${x.old || 'N/A'} | Nom: ${x.name}</span><br><span style="font-size:0.75rem; color: var(--primary);">${x.mail}</span><button class="action-icon" style="position:absolute; right:10px; top:10px;" onclick="delReport(${i})">🗑️</button></div>`;
+                });
+            }
         }
 
-        function togglePrem(i) { db[i].premium = !db[i].premium; localStorage.setItem('k_db', JSON.stringify(db)); refreshAdmin(); }
-        function delUser(i) { db.splice(i,1); localStorage.setItem('k_db', JSON.stringify(db)); refreshAdmin(); }
-        function delUrg(i) { urg.splice(i,1); localStorage.setItem('k_urg', JSON.stringify(urg)); refreshAdmin(); }
+        function togglePrem(u) { db = db.map(x => x.user === u ? {...x, prem: !x.prem} : x); localStorage.setItem('k_db', JSON.stringify(db)); loadAdmin(); }
+        function delLog(u) { db = db.filter(x => x.user !== u); localStorage.setItem('k_db', JSON.stringify(db)); loadAdmin(); }
+        function delReport(i) { reports.splice(i, 1); localStorage.setItem('k_reports', JSON.stringify(reports)); loadAdmin(); }
 
-        function selectOption(type) {
-            currentType = type;
+        function openForm(opt) {
+            document.querySelectorAll('#helpForm input').forEach(inp => inp.value = "");
+            document.getElementById('helpError').style.display = 'none';
             document.getElementById('optionsMenu').style.display = 'none';
-            document.getElementById('btnBack').style.display = 'block';
-            document.getElementById('dynamicForm').style.display = 'block';
-            document.getElementById('helpMsg').style.display = 'none';
-            document.getElementById('hPs').style.display = (type === 'MOT DE PASSE OUBLIÉ') ? 'none' : 'block';
+            document.getElementById('helpForm').style.display = 'block';
+            const titles = ["", "MOT DE PASSE OUBLIÉ", "COMPTE VOLÉ", "COMPTE BANNI"];
+            document.getElementById('formTitle').innerText = titles[opt];
+            document.getElementById('helpOld').style.display = (opt === 1) ? 'none' : 'block';
         }
 
-        function resetAide() {
+        function closeForm() {
             document.getElementById('optionsMenu').style.display = 'block';
-            document.getElementById('dynamicForm').style.display = 'none';
-            document.getElementById('btnBack').style.display = 'none';
-            document.getElementById('helpMsg').style.display = 'none';
-            document.querySelectorAll('#dynamicForm input').forEach(i => i.value = "");
+            document.getElementById('helpForm').style.display = 'none';
+            document.getElementById('helpError').style.display = 'none';
         }
 
-        function handleSignal() {
-            const id = document.getElementById('hId').value, nm = document.getElementById('hNm').value, em = document.getElementById('hEm').value, ps = document.getElementById('hPs').value;
-            const msgBox = document.getElementById('helpMsg');
+        function submitHelp() {
+            const id = document.getElementById('helpId').value;
+            const type = document.getElementById('formTitle').innerText;
 
-            if(!id || !nm || !em) return;
-
-            if(currentType === 'MOT DE PASSE OUBLIÉ') {
-                const userExists = db.some(x => x.user.toLowerCase() === id.toLowerCase());
+            // VERIFICATION : Si "Mot de passe oublié", l'ID doit exister dans db
+            if(type === "MOT DE PASSE OUBLIÉ") {
+                const userExists = db.some(u => u.user === id);
                 if(!userExists) {
-                    msgBox.className = "msg-box msg-error";
-                    msgBox.innerText = "Votre compte n'a pas été enregistré sur le site avant d'oublier votre mot de passe.";
-                    msgBox.style.display = 'block';
+                    document.getElementById('helpError').style.display = 'block';
+                    speak("Erreur. Identifiant inconnu dans le registre.");
                     return;
                 }
             }
 
-            urg.push({type: currentType, user: id, pass: ps, nom: nm, mail: em});
-            localStorage.setItem('k_urg', JSON.stringify(urg));
-            document.getElementById('dynamicForm').style.display = 'none';
-            msgBox.className = "msg-box msg-success";
-            msgBox.innerText = "✅ Signalement envoyé à l'administration.";
-            msgBox.style.display = 'block';
-            setTimeout(() => { resetAide(); }, 4000);
-            if(document.getElementById('dashboard').style.display === 'flex') refreshAdmin();
+            if(!id) return;
+
+            // Ajout au tableau existant (ne remplace pas)
+            reports.push({
+                id: id,
+                type: type,
+                old: document.getElementById('helpOld').value,
+                name: document.getElementById('helpName').value,
+                mail: document.getElementById('helpMail').value
+            });
+            
+            localStorage.setItem('k_reports', JSON.stringify(reports));
+            document.getElementById('helpForm').style.display = 'none';
+            document.getElementById('helpSent').style.display = 'block';
+            speak("Signalement envoyé.");
+            setTimeout(() => { document.getElementById('helpSent').style.display = 'none'; closeForm(); }, 2000);
+            if(document.getElementById('dashboard').style.display === 'flex') loadAdmin();
         }
     </script>
 </body>
