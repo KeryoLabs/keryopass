@@ -3,102 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeryoPass System v3.3</title>
+    <title>KeryoPass System v3.8</title>
     <style>
-        :root {
-            --primary: #2f81f7;
-            --secondary: #5865f2;
-            --bg: #0d1117;
-            --card: #161b22;
-            --border: #30363d;
-            --urgency: #f85149;
-        }
-
-        body { 
-            background: #2b3eb1; 
-            color: white; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; 
-            display: flex; 
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .main-layout {
-            display: grid;
-            grid-template-areas: "detail protect" "admin aide";
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            width: 100%;
-            max-width: 1100px;
-        }
-
-        .panel { 
-            background: black; 
-            border-radius: 40px; 
-            padding: 25px; 
-            border: 2px solid var(--border);
-            min-height: 450px;
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-        }
-
-        h2 { color: var(--primary); font-size: 0.9rem; text-align: center; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
-        
-        input { width: 100%; box-sizing: border-box; padding: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 10px; text-align: center; outline: none; }
+        :root { --primary: #2f81f7; --secondary: #5865f2; --border: #30363d; --urgency: #f85149; --success: #238636; }
+        body { background: #2b3eb1; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; padding: 20px; }
+        .main-layout { display: grid; grid-template-areas: "detail protect" "admin aide"; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1100px; }
+        .panel { background: black; border-radius: 40px; padding: 25px; border: 2px solid var(--border); min-height: 480px; display: flex; flex-direction: column; box-sizing: border-box; }
+        h2 { color: var(--primary); font-size: 0.9rem; text-align: center; margin-top: 0; text-transform: uppercase; }
+        input { width: 100%; box-sizing: border-box; padding: 10px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 10px; margin-bottom: 8px; text-align: center; outline: none; }
         button { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        
         .btn-blue { background: var(--primary); color: white; }
-        .btn-blue:hover { background: #4493f8; }
-        .btn-option { background: #1c2128; border: 1px solid var(--border); color: white; border-radius: 25px; margin-bottom: 10px; text-align: left; padding-left: 20px; }
-        .btn-logout { background: var(--urgency); color: white; margin-top: auto; font-size: 0.8rem; }
-        .btn-back { background: #333; color: #ccc; margin-top: 10px; font-size: 0.7rem; }
-
-        /* ADMIN TABS */
+        .msg-box { display: none; margin-top: 10px; padding: 10px; border-radius: 10px; font-size: 0.8rem; text-align: center; }
+        .msg-success { background: rgba(35, 134, 54, 0.2); border: 1px solid var(--success); color: #7ee787; }
+        .msg-error { background: rgba(248, 81, 73, 0.2); border: 1px solid var(--urgency); color: #ffa198; }
         .admin-nav { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
         .nav-tab { background: #21262d; padding: 8px 15px; border-radius: 20px; color: white; border: 1px solid var(--border); cursor: pointer; font-size: 0.75rem; width: auto; }
         .nav-tab.active { background: var(--secondary); border-color: var(--secondary); }
-        
         .list-item { border-bottom: 1px solid #30363d; padding: 12px 0; font-size: 0.8rem; }
-        .list-row { display: flex; justify-content: space-between; align-items: center; }
-        
         .urg-card { background: #1c2128; border-left: 4px solid var(--urgency); border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 0.75rem; position: relative; }
-        .del-urg { position: absolute; top: 8px; right: 8px; cursor: pointer; opacity: 0.6; }
-
-        .orb-ai { width: 65px; height: 65px; background: radial-gradient(circle, var(--secondary), var(--primary)); border-radius: 50%; margin: auto auto 0 auto; animation: pulse 3s infinite; }
+        .del-urg { position: absolute; top: 8px; right: 8px; cursor: pointer; }
+        .orb-ai { width: 60px; height: 60px; background: radial-gradient(circle, var(--secondary), var(--primary)); border-radius: 50%; margin: auto auto 0 auto; animation: pulse 3s infinite; }
         @keyframes pulse { 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--primary); } }
-        
-        .copy-box { background: #0d1117; border: 1px dashed var(--primary); border-radius: 12px; padding: 15px; margin-top: 15px; text-align: center; }
+        .btn-option { background: #1c2128; border: 1px solid var(--border); color: white; border-radius: 25px; margin-bottom: 10px; text-align: left; padding-left: 20px; }
+        .btn-logout { background: var(--urgency); color: white; margin-top: auto; font-size: 0.8rem; }
+        .btn-back { background: #333; color: #ccc; margin-top: 10px; font-size: 0.7rem; }
     </style>
 </head>
 <body>
 
     <div class="main-layout">
-        
-        <!-- SITE DETAIL -->
-        <div class="panel area-detail">
+        <div class="panel">
             <h2>Détail du site 🔊</h2>
-            <p style="font-size:0.85rem; color:#8b949e; text-align:center; line-height:1.5;">Protection Keryo active.<br>Analyse des menaces en temps réel.</p>
-            <button class="btn-blue" onclick="speak('Protection Keryo active.')">ÉCOUTER L'ÉTAT</button>
+            <p style="font-size:0.8rem; color:#8b949e; text-align:center;">Système Keryo v3.8</p>
+            <button class="btn-blue" onclick="speak('Protection active.')">ÉCOUTER L'ÉTAT</button>
         </div>
 
-        <!-- PROTECTION INPUT -->
-        <div class="panel area-protect">
+        <div class="panel">
             <h2>Protection</h2>
             <input type="text" id="regUser" placeholder="Identifiant">
             <input type="password" id="regPass" placeholder="Mot de passe">
             <button class="btn-blue" onclick="saveData()">INSÉRATION</button>
+            <div id="confirmMsg" class="msg-box msg-success">✅ Données sécurisées !</div>
         </div>
 
-        <!-- ADMIN PANEL -->
-        <div class="panel area-admin">
+        <div class="panel">
             <div id="adminLock">
-                <h2 style="color:white; font-size: 0.75rem;">ZONE ADMINISTRATION</h2>
+                <h2 style="color:white; font-size: 0.75rem;">ADMINISTRATION</h2>
                 <input type="password" id="admKey" placeholder="CLEF ACCÈS">
                 <button class="btn-blue" onclick="checkAdmin()">DÉVERROUILLER</button>
             </div>
-
             <div id="dashboard" style="display:none; flex-direction: column; height: 100%;">
                 <div class="admin-nav">
                     <button id="tH" class="nav-tab active" onclick="showTab('h')">hist.</button>
@@ -108,25 +61,29 @@
                 <div id="contentH" style="overflow-y: auto; flex-grow: 1;"></div>
                 <div id="contentU" style="display:none; overflow-y: auto; flex-grow: 1;"></div>
                 <div id="contentP" style="display:none; overflow-y: auto; flex-grow: 1;"></div>
-                
                 <button class="btn-logout" onclick="logoutAdmin()">DÉCONNEXION</button>
             </div>
         </div>
 
-        <!-- HELP / AIDE -->
-        <div class="panel area-aide">
+        <div class="panel">
             <div style="background:var(--secondary); border-radius:20px; padding:10px; text-align:center; font-weight:bold; margin-bottom:20px; font-size: 0.8rem;">⚠️ AIDE MOI ⚠️</div>
             
             <div id="optionsMenu">
-                <button class="btn-option" onclick="selectOption(1)">1. Mot de passe oublié</button>
-                <button class="btn-option" onclick="selectOption(2)">2. Compte volé</button>
-                <button class="btn-option" onclick="selectOption(3)">3. Compte banni</button>
+                <button class="btn-option" onclick="selectOption('MOT DE PASSE OUBLIÉ')">1. Mot de passe oublié</button>
+                <button class="btn-option" onclick="selectOption('COMPTE VOLÉ')">2. Compte volé</button>
+                <button class="btn-option" onclick="selectOption('COMPTE BANNI')">3. Compte banni</button>
             </div>
-            
-            <div id="dynamicForm" style="display:none;"></div>
-            <div id="pwDisplay"></div> 
-            <button id="btnBack" class="btn-back" style="display:none;" onclick="resetAide()">← RETOUR AUX OPTIONS</button>
-            
+
+            <div id="dynamicForm" style="display:none;">
+                <input type="text" id="hId" placeholder="Identifiant">
+                <input type="password" id="hPs" placeholder="Mot de passe"> <input type="text" id="hNm" placeholder="Nom et Prénom">
+                <input type="email" id="hEm" placeholder="Email">
+                <button class="btn-blue" onclick="handleSignal()">SIGNALER</button>
+            </div>
+
+            <div id="helpMsg" class="msg-box"></div>
+
+            <button id="btnBack" class="btn-back" style="display:none;" onclick="resetAide()">← RETOUR</button>
             <div class="orb-ai"></div>
         </div>
     </div>
@@ -134,135 +91,118 @@
     <script>
         let db = JSON.parse(localStorage.getItem('k_db') || '[]');
         let urg = JSON.parse(localStorage.getItem('k_urg') || '[]');
+        let currentType = "";
 
         function speak(t) { window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
 
         function saveData() {
-            const u = document.getElementById('regUser').value;
-            const p = document.getElementById('regPass').value;
+            const u = document.getElementById('regUser').value, p = document.getElementById('regPass').value;
             if(!u || !p) return;
             db.push({user: u, pass: p, premium: false});
             localStorage.setItem('k_db', JSON.stringify(db));
-            alert("Données sécurisées !");
-            document.getElementById('regUser').value = "";
-            document.getElementById('regPass').value = "";
+            document.getElementById('confirmMsg').style.display = 'block';
+            setTimeout(() => document.getElementById('confirmMsg').style.display = 'none', 3000);
+            document.getElementById('regUser').value = ""; document.getElementById('regPass').value = "";
             if(document.getElementById('dashboard').style.display === 'flex') refreshAdmin();
         }
 
-        /* --- LOGIQUE ADMIN --- */
         function checkAdmin() {
-            // VERIFICATION DU MOT DE PASSE CORRECT
             if(document.getElementById('admKey').value === "123a456b!M_g") {
                 document.getElementById('adminLock').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'flex';
                 refreshAdmin();
-            } else {
-                alert("Clé d'accès invalide.");
             }
         }
 
-        function logoutAdmin() {
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('adminLock').style.display = 'block';
-            document.getElementById('admKey').value = "";
-        }
+        function logoutAdmin() { document.getElementById('dashboard').style.display = 'none'; document.getElementById('adminLock').style.display = 'block'; }
 
         function showTab(t) {
             document.getElementById('contentH').style.display = t === 'h' ? 'block' : 'none';
             document.getElementById('contentU').style.display = t === 'u' ? 'block' : 'none';
             document.getElementById('contentP').style.display = t === 'p' ? 'block' : 'none';
-            document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
             document.getElementById('t' + t.toUpperCase()).classList.add('active');
         }
 
         function refreshAdmin() {
-            // Onglet HISTORIQUE
-            document.getElementById('contentH').innerHTML = db.filter(x => !x.premium).map((x) => `
+            const render = (x) => `
                 <div class="list-item">
-                    <div class="list-row">
+                    <div style="display:flex; justify-content:space-between">
                         <strong style="color:var(--primary)">${x.user}</strong>
                         <div>
-                            <button onclick="togglePrem(${db.indexOf(x)})" style="width:auto; background:none; color:white; font-size:1.2rem;">☆</button>
+                            <button onclick="togglePrem(${db.indexOf(x)})" style="width:auto; background:none; color:white;">${x.premium?'★':'☆'}</button>
                             <button onclick="delUser(${db.indexOf(x)})" style="width:auto; background:none; color:white;">🗑️</button>
                         </div>
                     </div>
-                    <div style="color:#8b949e; font-size:0.7rem; margin-top:4px;">Pass: ${x.pass}</div>
-                </div>`).join('');
-
-            // Onglet FAVORIS (★)
-            document.getElementById('contentP').innerHTML = db.filter(x => x.premium).map((x) => `
-                <div class="list-item">
-                    <div class="list-row">
-                        <strong style="color:gold">${x.user}</strong>
-                        <button onclick="togglePrem(${db.indexOf(x)})" style="width:auto; background:none; color:gold; font-size:1.2rem;">★</button>
-                    </div>
-                    <div style="color:#8b949e; font-size:0.7rem; margin-top:4px;">Pass: ${x.pass}</div>
-                </div>`).join('');
-
-            // Onglet URGENCE
-            document.getElementById('contentU').innerHTML = urg.length ? urg.map((x, i) => `
+                    <div style="color:#8b949e; font-size:0.7rem; margin-top:5px;">PASS: ${x.pass}</div>
+                </div>`;
+            
+            document.getElementById('contentH').innerHTML = db.filter(x => !x.premium).map(render).join('');
+            document.getElementById('contentP').innerHTML = db.filter(x => x.premium).map(render).join('');
+            document.getElementById('contentU').innerHTML = urg.map((x, i) => `
                 <div class="urg-card">
                     <span class="del-urg" onclick="delUrg(${i})">✖</span>
-                    <strong style="color:var(--urgency)">ALERTE: ${x.user}</strong><br>
-                    <small>Pass: ${x.pass}</small><br>
-                    <small>Nom: ${x.nom}</small><br>
-                    <small>Email: ${x.mail}</small>
-                </div>`).join('') : '<p style="text-align:center; font-size:0.8rem; color:#555;">Aucune urgence</p>';
+                    <strong style="color:var(--urgency)">${x.type}</strong><br>
+                    <strong>ID: ${x.user}</strong><br>
+                    <small>Nom: ${x.nom}<br>Email: ${x.mail}${x.pass ? '<br>Tentative Pass: '+x.pass : ''}</small>
+                </div>`).join('');
         }
 
-        function togglePrem(idx) { db[idx].premium = !db[idx].premium; localStorage.setItem('k_db', JSON.stringify(db)); refreshAdmin(); }
-        function delUser(idx) { if(confirm("Supprimer ?")) { db.splice(idx, 1); localStorage.setItem('k_db', JSON.stringify(db)); refreshAdmin(); } }
-        function delUrg(idx) { urg.splice(idx, 1); localStorage.setItem('k_urg', JSON.stringify(urg)); refreshAdmin(); }
+        function togglePrem(i) { db[i].premium = !db[i].premium; localStorage.setItem('k_db', JSON.stringify(db)); refreshAdmin(); }
+        function delUser(i) { db.splice(i,1); localStorage.setItem('k_db', JSON.stringify(db)); refreshAdmin(); }
+        function delUrg(i) { urg.splice(i,1); localStorage.setItem('k_urg', JSON.stringify(urg)); refreshAdmin(); }
 
-        /* --- LOGIQUE AIDE --- */
-        function selectOption(opt) {
+        function selectOption(type) {
+            currentType = type;
             document.getElementById('optionsMenu').style.display = 'none';
             document.getElementById('btnBack').style.display = 'block';
-            const form = document.getElementById('dynamicForm');
-            form.style.display = 'block';
+            document.getElementById('dynamicForm').style.display = 'block';
+            document.getElementById('helpMsg').style.display = 'none';
             
-            if(opt === 1) {
-                form.innerHTML = `<input type="text" id="idS" placeholder="Ton Identifiant"><button class="btn-blue" onclick="runAI(1)">VÉRIFIER</button>`;
-            } else {
-                form.innerHTML = `
-                    <input type="text" id="idS" placeholder="Identifiant">
-                    <input type="text" id="idPS" placeholder="Dernier mot de passe">
-                    <input type="text" id="idN" placeholder="Nom et Prénom">
-                    <input type="email" id="idM" placeholder="Email de contact">
-                    <button class="btn-blue" onclick="runAI(${opt})">ENVOYER LE SIGNALEMENT</button>`;
-            }
+            // Si c'est mdp oublié, on cache le champ mot de passe
+            document.getElementById('hPs').style.display = (type === 'MOT DE PASSE OUBLIÉ') ? 'none' : 'block';
         }
 
         function resetAide() {
             document.getElementById('optionsMenu').style.display = 'block';
             document.getElementById('dynamicForm').style.display = 'none';
             document.getElementById('btnBack').style.display = 'none';
-            document.getElementById('pwDisplay').innerHTML = "";
+            document.getElementById('helpMsg').style.display = 'none';
+            document.querySelectorAll('#dynamicForm input').forEach(i => i.value = "");
         }
 
-        function runAI(opt) {
-            if(opt === 1) {
-                const id = document.getElementById('idS').value;
-                const found = db.find(x => x.user === id);
-                if(found) {
-                    document.getElementById('pwDisplay').innerHTML = `
-                        <div class="copy-box">
-                            <div style="font-size:0.75rem; color:var(--primary); margin-bottom:5px;">MOT DE PASSE TROUVÉ</div>
-                            <div style="font-weight:bold; font-family:monospace; margin-bottom:10px;">${found.pass}</div>
-                            <button class="btn-blue" style="padding:6px; font-size:0.7rem;" onclick="navigator.clipboard.writeText('${found.pass}');alert('Copié !')">COPIER</button>
-                        </div>`;
-                } else { alert("Utilisateur introuvable dans la base."); }
-            } else {
-                urg.push({
-                    user: document.getElementById('idS').value, 
-                    pass: document.getElementById('idPS').value, 
-                    nom: document.getElementById('idN').value, 
-                    mail: document.getElementById('idM').value
-                });
-                localStorage.setItem('k_urg', JSON.stringify(urg));
-                alert("Signalement envoyé à l'administration.");
-                resetAide();
+        function handleSignal() {
+            const id = document.getElementById('hId').value;
+            const nm = document.getElementById('hNm').value;
+            const em = document.getElementById('hEm').value;
+            const ps = document.getElementById('hPs').value;
+            const msgBox = document.getElementById('helpMsg');
+
+            if(!id || !nm || !em) return;
+
+            // Logique de vérification pour "Mot de passe oublié"
+            if(currentType === 'MOT DE PASSE OUBLIÉ') {
+                const userExists = db.some(x => x.user.toLowerCase() === id.toLowerCase());
+                
+                if(!userExists) {
+                    msgBox.className = "msg-box msg-error";
+                    msgBox.innerText = "Votre compte n'a pas été enregistré sur le site avant d'oublier votre mot de passe.";
+                    msgBox.style.display = 'block';
+                    return;
+                }
             }
+
+            // Si ok ou autres options, on envoie
+            urg.push({type: currentType, user: id, pass: ps, nom: nm, mail: em});
+            localStorage.setItem('k_urg', JSON.stringify(urg));
+            
+            document.getElementById('dynamicForm').style.display = 'none';
+            msgBox.className = "msg-box msg-success";
+            msgBox.innerText = "✅ Signalement envoyé à l'administration.";
+            msgBox.style.display = 'block';
+            
+            setTimeout(() => { resetAide(); }, 4000);
+            if(document.getElementById('dashboard').style.display === 'flex') refreshAdmin();
         }
     </script>
 </body>
