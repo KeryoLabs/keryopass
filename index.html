@@ -5,24 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KeryoPass System v5.0 - Final Edition</title>
     <style>
-        :root { --primary: #2f81f7; --secondary: #5865f2; --border: #30363d; --urgency: #f85149; --success: #238636; --panel-bg: #000000; }
-        body { background: #2b3eb1; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; padding: 20px; }
-        .main-layout { display: grid; grid-template-areas: "detail protect" "admin aide"; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1100px; }
-        .panel { background: var(--panel-bg); border-radius: 40px; padding: 25px; border: 2px solid var(--border); min-height: 550px; display: flex; flex-direction: column; box-sizing: border-box; position: relative; }
-        h2 { color: var(--primary); font-size: 0.9rem; text-align: center; margin-top: 0; text-transform: uppercase; }
+        :root { --primary: #2f81f7; --secondary: #5865f2; --border: #30363d; --urgency: #f85149; --success: #238636; --panel-bg: rgba(0, 0, 0, 0.85); }
         
+        /* ZONE D'IMAGE DERRIÈRE (FOND) */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place l'image derrière tout le reste */
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('fondroblox.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        body { 
+            color: white; 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            padding: 20px; 
+            min-height: 100vh;
+            background-color: #0d1117; /* Couleur de secours si l'image manque */
+        }
+
+        .main-layout { 
+            display: grid; 
+            grid-template-areas: "detail protect" "admin aide"; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            width: 100%; 
+            max-width: 1100px; 
+            z-index: 1;
+        }
+
+        .panel { 
+            background: var(--panel-bg); 
+            border-radius: 40px; 
+            padding: 25px; 
+            border: 2px solid var(--border); 
+            min-height: 550px; 
+            display: flex; 
+            flex-direction: column; 
+            box-sizing: border-box; 
+            position: relative; 
+            backdrop-filter: blur(10px); /* Flou artistique sur les panneaux */
+        }
+
+        h2 { color: var(--primary); font-size: 0.9rem; text-align: center; margin-top: 0; text-transform: uppercase; }
         .site-desc { font-size: 0.8rem; color: #8b949e; line-height: 1.5; text-align: justify; margin: 15px 0; padding: 10px; border-top: 1px solid #161b22; }
         input { width: 100%; box-sizing: border-box; padding: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 8px; text-align: center; outline: none; }
         button { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-blue { background: var(--primary); color: white; }
         
-        /* ADMIN NAV */
         .admin-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
         .nav-tab { background: #30363d; padding: 10px 25px; border-radius: 30px; color: white; border: none; cursor: pointer; font-size: 0.85rem; }
         .nav-tab.active { background: var(--secondary); }
         .nav-tab-star { border-radius: 50%; width: 50px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
         
-        /* LIST STYLE */
         .list-item { border-bottom: 1px solid #161b22; padding: 15px 5px; position: relative; }
         .list-user { color: var(--primary); font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 10px; }
         .list-pass { color: #8b949e; font-size: 0.8rem; display: block; }
@@ -37,6 +80,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Conteneur de l'image de fond -->
+    <div class="background-container"></div>
 
     <div class="main-layout">
         <div class="panel">
@@ -98,7 +144,6 @@
     </div>
 
     <script>
-        // Récupération propre des données (Assure que 'reports' est un tableau)
         let db = JSON.parse(localStorage.getItem('k_db')) || [];
         let reports = JSON.parse(localStorage.getItem('k_reports')) || [];
         let currentTab = 'h';
@@ -182,8 +227,6 @@
         function submitHelp() {
             const id = document.getElementById('helpId').value;
             const type = document.getElementById('formTitle').innerText;
-
-            // VERIFICATION : Si "Mot de passe oublié", l'ID doit exister dans db
             if(type === "MOT DE PASSE OUBLIÉ") {
                 const userExists = db.some(u => u.user === id);
                 if(!userExists) {
@@ -192,10 +235,7 @@
                     return;
                 }
             }
-
             if(!id) return;
-
-            // Ajout au tableau existant (ne remplace pas)
             reports.push({
                 id: id,
                 type: type,
@@ -203,7 +243,6 @@
                 name: document.getElementById('helpName').value,
                 mail: document.getElementById('helpMail').value
             });
-            
             localStorage.setItem('k_reports', JSON.stringify(reports));
             document.getElementById('helpForm').style.display = 'none';
             document.getElementById('helpSent').style.display = 'block';
